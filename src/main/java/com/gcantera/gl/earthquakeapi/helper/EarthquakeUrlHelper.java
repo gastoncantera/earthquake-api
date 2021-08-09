@@ -15,12 +15,16 @@ public class EarthquakeUrlHelper {
         return buildQuery(earthquakeQueryUrl, "starttime", startTime, "endtime", endTime);
     }
 
+    public String buildQueryByMagnitudes(String minMagnitude, String maxMagnitude) {
+        return buildQuery(earthquakeQueryUrl, "minmagnitude", minMagnitude, "maxmagnitude", maxMagnitude);
+    }
+
     public String buildCountByDates(String startTime, String endTime) {
         return buildQuery(earthquakeCountUrl, "starttime", startTime, "endtime", endTime);
     }
 
-    public String buildQueryByMagnitudes(String minMagnitude, String maxMagnitude) {
-        return buildQuery(earthquakeQueryUrl, "minmagnitude", minMagnitude, "maxmagnitude", maxMagnitude);
+    public String buildCountByMagnitudes(String minMagnitude, String maxMagnitude) {
+        return buildQuery(earthquakeCountUrl, "minmagnitude", minMagnitude, "maxmagnitude", maxMagnitude);
     }
 
     private String buildQuery(String url,

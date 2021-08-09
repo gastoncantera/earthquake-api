@@ -71,4 +71,21 @@ public class EarthquakeServiceImpl implements EarthquakeService {
         return earthquakeDto;
     }
 
+    @Override
+    public String getEarthquakesCountByDateRange(String startTime, String endTime) {
+        String jsonResponse = null;
+
+        ResponseEntity<String> response = restClient.exchange(
+                earthquakeUrlHelper.buildCountByDates(startTime, endTime),
+                HttpMethod.GET,
+                new HttpEntity<>(new HttpHeaders()),
+                String.class
+        );
+        if (response.getStatusCode().is2xxSuccessful()) {
+            jsonResponse = response.getBody();
+        }
+
+        return jsonResponse;
+    }
+
 }

@@ -10,4 +10,6 @@ public interface EarthquakeService {
 
     EarthquakeDto getEarthquakesByCountry(String country);
 
+    String getEarthquakesCountByDateRange(String startTime, String endTime);
+
 }

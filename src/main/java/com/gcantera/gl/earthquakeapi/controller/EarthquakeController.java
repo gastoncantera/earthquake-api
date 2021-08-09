@@ -52,4 +52,17 @@ public class EarthquakeController {
     public EarthquakeDto getEarthquakesByCountry(@RequestParam String country) {
         return earthquakeService.getEarthquakesByCountry(country);
     }
+
+    /**
+     * Retrieves the count of earthquakes between a date range
+     *
+     * @param startTime The start date to get the earthquakes (format: yyyy-mm-dd)
+     * @param endTime   The end date to get the earthquakes (format: yyyy-mm-dd)
+     * @return A response containing the String {@link String}
+     */
+    @GetMapping("/daterangecount")
+    public String getEarthquakesCountByDateRange(@RequestParam(name = "starttime") String startTime,
+                                                 @RequestParam(name = "endtime") String endTime) {
+        return earthquakeService.getEarthquakesCountByDateRange(startTime, endTime);
+    }
 }
