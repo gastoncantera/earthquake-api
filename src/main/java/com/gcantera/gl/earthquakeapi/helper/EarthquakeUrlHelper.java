@@ -1,8 +1,10 @@
 package com.gcantera.gl.earthquakeapi.helper;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Data
 @Component
 public class EarthquakeUrlHelper {
     @Value("${earthquake.query-url}")
