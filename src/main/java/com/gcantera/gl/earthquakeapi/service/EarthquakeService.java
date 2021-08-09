@@ -8,4 +8,6 @@ public interface EarthquakeService {
 
     EarthquakeDto getEarthquakesByMagnitudesRange(String minMagnitude, String maxMagnitude);
 
+    EarthquakeDto getEarthquakesByCountry(String country);
+
 }
