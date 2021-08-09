@@ -21,23 +21,18 @@ public class EarthquakeServiceImpl implements EarthquakeService {
     public EarthquakeDto getEarthquakesByDateRange(String startTime, String endTime) {
 
         EarthquakeDto earthquakeDto = null;
-        String url = earthquakeUrlHelper.buildEarthquakeUrlByDates(startTime, endTime);
 
-        ResponseEntity<EarthquakeDto> response = callEarthquakeService(url);
+        ResponseEntity<EarthquakeDto> response = restClient.exchange(
+                earthquakeUrlHelper.buildEarthquakeUrlByDates(startTime, endTime),
+                HttpMethod.GET,
+                new HttpEntity<>(new HttpHeaders()),
+                EarthquakeDto.class
+        );
         if (response.getStatusCode().is2xxSuccessful()) {
             earthquakeDto = response.getBody();
         }
 
         return earthquakeDto;
-    }
-
-    private ResponseEntity<EarthquakeDto> callEarthquakeService(String url) {
-        return restClient.exchange(
-                url,
-                HttpMethod.GET,
-                new HttpEntity<>(new HttpHeaders()),
-                EarthquakeDto.class
-        );
     }
 
 }

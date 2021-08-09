@@ -14,7 +14,7 @@ public class EarthquakeController {
     private EarthquakeService earthquakeService;
 
     @GetMapping("/daterange")
-    public EarthquakeDto getEarthquakesByDateRange(@RequestParam String startTime, @RequestParam String endTime) {
+    public EarthquakeDto getEarthquakesByDateRange(@RequestParam(name="starttime") String startTime, @RequestParam(name="endtime") String endTime) {
         return earthquakeService.getEarthquakesByDateRange(startTime, endTime);
     }
 }
