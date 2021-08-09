@@ -8,38 +8,38 @@ public class EarthquakeUrlHelper {
     @Value("${earthquake.query-url}")
     private String earthquakeQueryUrl;
 
-    public String buildEarthquakeUrlByDates(String startTime, String endTime) {
-        StringBuilder sb = new StringBuilder(earthquakeQueryUrl);
-        sb.append("?").append("format=geojson");
-        if (startTime != null) {
-            sb.append("&")
-                    .append("starttime")
-                    .append("=")
-                    .append(startTime);
-        }
-        if (endTime != null) {
-            sb.append("&")
-                    .append("endtime")
-                    .append("=")
-                    .append(endTime);
-        }
-        return sb.toString();
+    @Value("${earthquake.count-url}")
+    private String earthquakeCountUrl;
+
+    public String buildQueryByDates(String startTime, String endTime) {
+        return buildQuery(earthquakeQueryUrl, "starttime", startTime, "endtime", endTime);
     }
 
-    public String buildEarthquakeUrlByMagnitudes(String minMagnitude, String maxMagnitude) {
-        StringBuilder sb = new StringBuilder(earthquakeQueryUrl);
+    public String buildCountByDates(String startTime, String endTime) {
+        return buildQuery(earthquakeCountUrl, "starttime", startTime, "endtime", endTime);
+    }
+
+    public String buildQueryByMagnitudes(String minMagnitude, String maxMagnitude) {
+        return buildQuery(earthquakeQueryUrl, "minmagnitude", minMagnitude, "maxmagnitude", maxMagnitude);
+    }
+
+    private String buildQuery(String url,
+                              String param1Label, String param1,
+                              String param2Label, String param2
+    ) {
+        StringBuilder sb = new StringBuilder(url);
         sb.append("?").append("format=geojson");
-        if (minMagnitude != null) {
+        if (param1 != null) {
             sb.append("&")
-                    .append("minmagnitude")
+                    .append(param1Label)
                     .append("=")
-                    .append(minMagnitude);
+                    .append(param1);
         }
-        if (maxMagnitude != null) {
+        if (param2 != null) {
             sb.append("&")
-                    .append("maxmagnitude")
+                    .append(param2Label)
                     .append("=")
-                    .append(maxMagnitude);
+                    .append(param2);
         }
         return sb.toString();
     }

@@ -26,7 +26,7 @@ public class EarthquakeServiceImpl implements EarthquakeService {
         EarthquakeDto earthquakeDto = null;
 
         ResponseEntity<EarthquakeDto> response = restClient.exchange(
-                earthquakeUrlHelper.buildEarthquakeUrlByDates(startTime, endTime),
+                earthquakeUrlHelper.buildQueryByDates(startTime, endTime),
                 HttpMethod.GET,
                 new HttpEntity<>(new HttpHeaders()),
                 EarthquakeDto.class
@@ -43,7 +43,7 @@ public class EarthquakeServiceImpl implements EarthquakeService {
         EarthquakeDto earthquakeDto = null;
 
         ResponseEntity<EarthquakeDto> response = restClient.exchange(
-                earthquakeUrlHelper.buildEarthquakeUrlByMagnitudes(minMagnitude, maxMagnitude),
+                earthquakeUrlHelper.buildQueryByMagnitudes(minMagnitude, maxMagnitude),
                 HttpMethod.GET,
                 new HttpEntity<>(new HttpHeaders()),
                 EarthquakeDto.class
