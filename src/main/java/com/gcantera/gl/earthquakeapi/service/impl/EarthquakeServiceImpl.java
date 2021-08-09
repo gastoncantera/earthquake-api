@@ -19,11 +19,27 @@ public class EarthquakeServiceImpl implements EarthquakeService {
 
     @Override
     public EarthquakeDto getEarthquakesByDateRange(String startTime, String endTime) {
-
         EarthquakeDto earthquakeDto = null;
 
         ResponseEntity<EarthquakeDto> response = restClient.exchange(
                 earthquakeUrlHelper.buildEarthquakeUrlByDates(startTime, endTime),
+                HttpMethod.GET,
+                new HttpEntity<>(new HttpHeaders()),
+                EarthquakeDto.class
+        );
+        if (response.getStatusCode().is2xxSuccessful()) {
+            earthquakeDto = response.getBody();
+        }
+
+        return earthquakeDto;
+    }
+
+    @Override
+    public EarthquakeDto getEarthquakesByMagnitudesRange(String minMagnitude, String maxMagnitude) {
+        EarthquakeDto earthquakeDto = null;
+
+        ResponseEntity<EarthquakeDto> response = restClient.exchange(
+                earthquakeUrlHelper.buildEarthquakeUrlByMagnitudes(minMagnitude, maxMagnitude),
                 HttpMethod.GET,
                 new HttpEntity<>(new HttpHeaders()),
                 EarthquakeDto.class

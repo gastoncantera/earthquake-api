@@ -26,4 +26,22 @@ public class EarthquakeUrlHelper {
         return sb.toString();
     }
 
+    public String buildEarthquakeUrlByMagnitudes(String minMagnitude, String maxMagnitude) {
+        StringBuilder sb = new StringBuilder(earthquakeQueryUrl);
+        sb.append("?").append("format=geojson");
+        if (minMagnitude != null) {
+            sb.append("&")
+                    .append("minmagnitude")
+                    .append("=")
+                    .append(minMagnitude);
+        }
+        if (maxMagnitude != null) {
+            sb.append("&")
+                    .append("maxmagnitude")
+                    .append("=")
+                    .append(maxMagnitude);
+        }
+        return sb.toString();
+    }
+
 }

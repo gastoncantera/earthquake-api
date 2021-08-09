@@ -6,4 +6,6 @@ public interface EarthquakeService {
 
     EarthquakeDto getEarthquakesByDateRange(String startTime, String endTime);
 
+    EarthquakeDto getEarthquakesByMagnitudesRange(String minMagnitude, String maxMagnitude);
+
 }

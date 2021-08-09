@@ -14,7 +14,14 @@ public class EarthquakeController {
     private EarthquakeService earthquakeService;
 
     @GetMapping("/daterange")
-    public EarthquakeDto getEarthquakesByDateRange(@RequestParam(name="starttime") String startTime, @RequestParam(name="endtime") String endTime) {
+    public EarthquakeDto getEarthquakesByDateRange(@RequestParam(name = "starttime") String startTime,
+                                                   @RequestParam(name = "endtime") String endTime) {
         return earthquakeService.getEarthquakesByDateRange(startTime, endTime);
+    }
+
+    @GetMapping("/magnituderange")
+    public EarthquakeDto getEarthquakesByMagnitudeRange(@RequestParam(name = "minmagnitude") String minMagnitude,
+                                                        @RequestParam(name = "maxmagnitude") String maxMagnitude) {
+        return earthquakeService.getEarthquakesByMagnitudesRange(minMagnitude, maxMagnitude);
     }
 }
