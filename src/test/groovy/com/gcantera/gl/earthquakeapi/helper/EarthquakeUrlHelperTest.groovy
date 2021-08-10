@@ -9,22 +9,10 @@ class EarthquakeUrlHelperTest extends Specification {
     void setup() {
         earthquakeUrlHelper.setEarthquakeQueryUrl("http://fakequakes/query")
         earthquakeUrlHelper.setEarthquakeCountUrl("http://fakequakes/count")
-
-    }
-
-    def "buildCountByMagnitudes"() {
-        given:
-        String expectedUrl
-
-        when:
-        expectedUrl = earthquakeUrlHelper.buildCountByMagnitudes(null,null)
-
-        then:
-        expectedUrl == "http://fakequakes/count?format=geojson"
     }
 
     @Unroll
-    def "buildQueryByDates(#startTime, #endTime) == #expectedUrl"(String startTime, String endTime, String expectedUrl) {
+    def "test buildQueryByDates"(String startTime, String endTime, String expectedUrl) {
         expect:
         earthquakeUrlHelper.buildQueryByDates(startTime, endTime) == expectedUrl
 
@@ -37,7 +25,7 @@ class EarthquakeUrlHelperTest extends Specification {
     }
 
     @Unroll
-    def "buildQueryByMagnitudes(#minMagnitude, #maxMagnitude) == #expectedUrl"(String minMagnitude, String maxMagnitude, String expectedUrl) {
+    def "test buildQueryByMagnitudes"(String minMagnitude, String maxMagnitude, String expectedUrl) {
         expect:
         earthquakeUrlHelper.buildQueryByMagnitudes(minMagnitude, maxMagnitude) == expectedUrl
 
@@ -47,5 +35,16 @@ class EarthquakeUrlHelperTest extends Specification {
         "6.2"        | null         | "http://fakequakes/query?format=geojson&minmagnitude=6.2"
         null         | "7.4"        | "http://fakequakes/query?format=geojson&maxmagnitude=7.4"
         null         | null         | "http://fakequakes/query?format=geojson"
+    }
+
+    def "test buildCountByMagnitudes"() {
+        given:
+        String expectedUrl
+
+        when:
+        expectedUrl = earthquakeUrlHelper.buildCountByMagnitudes(null,null)
+
+        then:
+        expectedUrl == "http://fakequakes/count?format=geojson"
     }
 }

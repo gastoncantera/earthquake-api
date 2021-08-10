@@ -15,11 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class EarthquakeServiceImpl implements EarthquakeService {
 
-    @Autowired
     private RestTemplate restClient;
+    private EarthquakeUrlHelper earthquakeUrlHelper;
 
     @Autowired
-    private EarthquakeUrlHelper earthquakeUrlHelper;
+    public EarthquakeServiceImpl(RestTemplate restClient, EarthquakeUrlHelper earthquakeUrlHelper) {
+        this.restClient = restClient;
+        this.earthquakeUrlHelper = earthquakeUrlHelper;
+    }
 
     @Override
     public EarthquakeDto getEarthquakesByDateRange(String startTime, String endTime) {

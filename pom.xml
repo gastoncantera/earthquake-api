@@ -28,7 +28,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Spock -->
+		<!-- Mandatory dependencies for using Spock -->
 		<dependency>
 			<groupId>org.spockframework</groupId>
 			<artifactId>spock-core</artifactId>
@@ -41,6 +41,13 @@
 			<version>2.0-groovy-3.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Optional dependencies for using Spock -->
+		<dependency> <!-- enables mocking of classes (in addition to interfaces) -->
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>1.11.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -49,7 +56,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- Spock -->
+			<!-- Mandatory plugins for using Spock -->
 			<plugin>
 				<groupId>org.codehaus.gmavenplus</groupId>
 				<artifactId>gmavenplus-plugin</artifactId>
