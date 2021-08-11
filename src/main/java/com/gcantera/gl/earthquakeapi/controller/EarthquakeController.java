@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EarthquakeController {
 
-    @Autowired
     private EarthquakeService earthquakeService;
+
+    @Autowired
+    public EarthquakeController(EarthquakeService earthquakeService) {
+        this.earthquakeService = earthquakeService;
+    }
 
     /**
      * Retrieves the earthquakes between a date range
