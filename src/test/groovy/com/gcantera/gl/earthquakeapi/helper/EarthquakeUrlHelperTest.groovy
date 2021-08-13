@@ -6,7 +6,7 @@ import spock.lang.Unroll
 class EarthquakeUrlHelperTest extends Specification {
     EarthquakeUrlHelper earthquakeUrlHelper = new EarthquakeUrlHelper()
 
-    void setup() {
+    def setup() {
         earthquakeUrlHelper.setEarthquakeQueryUrl("http://fakequakes/query")
         earthquakeUrlHelper.setEarthquakeCountUrl("http://fakequakes/count")
     }

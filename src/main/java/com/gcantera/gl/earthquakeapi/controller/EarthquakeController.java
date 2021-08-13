@@ -2,20 +2,24 @@ package com.gcantera.gl.earthquakeapi.controller;
 
 import com.gcantera.gl.earthquakeapi.dto.EarthquakeDto;
 import com.gcantera.gl.earthquakeapi.service.EarthquakeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class EarthquakeController {
 
-    private EarthquakeService earthquakeService;
+    private final EarthquakeService earthquakeService;
 
-    @Autowired
-    public EarthquakeController(EarthquakeService earthquakeService) {
-        this.earthquakeService = earthquakeService;
-    }
+//    /**
+//     * Replaced by @RequiredArgsConstructor
+//     */
+//    @Autowired
+//    public EarthquakeController(EarthquakeService earthquakeService) {
+//        this.earthquakeService = earthquakeService;
+//    }
 
     /**
      * Retrieves the earthquakes between a date range
