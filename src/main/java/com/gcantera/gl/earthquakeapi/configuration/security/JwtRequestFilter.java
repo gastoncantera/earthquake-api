@@ -34,6 +34,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                             null,
                             jwtTokenHelper.getAuthoritiesFromToken(jwtToken)
                     );
+
+            // TODO: Catch Token exceptions (ExpiredJwtException, MalformedJwtException, etc)
+
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
 
