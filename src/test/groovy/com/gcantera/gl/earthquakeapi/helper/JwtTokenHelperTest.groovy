@@ -15,7 +15,7 @@ class JwtTokenHelperTest extends Specification {
         String expectedToken
 
         when:
-        expectedToken = jwtTokenHelper.buildToken("test", "USER_ROLE")
+        expectedToken = jwtTokenHelper.buildToken("test")
 
         then:
         expectedToken.startsWith("Bearer ")

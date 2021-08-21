@@ -5,21 +5,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
 @Component
 public class JwtTokenHelper {
-
-    private static final String HEADER = "Authorization";
-    private static final String PREFIX = "Bearer ";
 
     @Value("${jwt.token.secret}")
     private String secret;
@@ -27,32 +24,35 @@ public class JwtTokenHelper {
     @Value("${jwt.token.validity:600000}")
     private long validity;
 
-    public String buildToken(String username, String authorities) {
-        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList(authorities);
-
-        return PREFIX + Jwts
-                .builder()
+    public String buildToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return "Bearer " + Jwts.builder()
+                .setClaims(claims)
                 .setSubject(username)
-                .claim("authorities",
-                        grantedAuthorities.stream()
-                                .map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + validity))
-                .signWith(SignatureAlgorithm.HS512,
-                        secret.getBytes()).compact();
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
     }
 
-    public boolean tokenExists(HttpServletRequest request) {
-        String authenticationHeader = request.getHeader(HEADER);
-        if (authenticationHeader == null || !authenticationHeader.startsWith(PREFIX))
-            return false;
-        return true;
+    public String getUsernameFromToken(String token) {
+        return getAllClaimsFromToken(token).getSubject();
     }
 
-    public Claims getClaims(HttpServletRequest request) {
-        String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
-        return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(jwtToken).getBody();
+    public List<SimpleGrantedAuthority> getAuthoritiesFromToken(String token) {
+        List<SimpleGrantedAuthority> authorities = null;
+        List<String> tokenAuthorities = (List) getAllClaimsFromToken(token).get("authorities");
+
+        if (tokenAuthorities != null) {
+            authorities = tokenAuthorities.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        }
+
+        return authorities;
+    }
+
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 }
