@@ -15,7 +15,7 @@ class JwtTokenHelperTest extends Specification {
         String expectedToken
 
         when:
-        expectedToken = jwtTokenHelper.buildToken("test")
+        expectedToken = jwtTokenHelper.buildToken("test", new HashMap<>())
 
         then:
         expectedToken.startsWith("Bearer ")

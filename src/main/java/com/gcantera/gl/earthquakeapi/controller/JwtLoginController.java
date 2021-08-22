@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @CrossOrigin
 @RestController
 public class JwtLoginController {
@@ -31,6 +33,8 @@ public class JwtLoginController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
 
-        return jwtTokenHelper.buildToken(username);
+        // TODO: Inject UserDetailsService to loadUserByUsername the user details and get the authorities.
+        //       Then cook them inside the token using the HashMap if needed
+        return jwtTokenHelper.buildToken(username, new HashMap<>());
     }
 }

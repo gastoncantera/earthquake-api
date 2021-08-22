@@ -26,8 +26,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             String jwtToken = requestTokenHeader.substring(7);
 
-            // TODO: Should we re-validate the user? Or a valid token is enough?
-
+            // TODO: Catch token exceptions (ExpiredJwtException, MalformedJwtException, etc)
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
                             jwtTokenHelper.getUsernameFromToken(jwtToken),
@@ -35,8 +34,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                             jwtTokenHelper.getAuthoritiesFromToken(jwtToken)
                     );
 
-            // TODO: Catch Token exceptions (ExpiredJwtException, MalformedJwtException, etc)
-
+            // Valid non-expired token is enough to validate the user
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
 

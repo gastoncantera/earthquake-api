@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,11 +23,10 @@ public class JwtTokenHelper {
     @Value("${jwt.token.validity:600000}")
     private long validity;
 
-    public String buildToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
+    public String buildToken(String username, Map<String, Object> claims) {
         return "Bearer " + Jwts.builder()
-                .setClaims(claims)
                 .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + validity))
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -36,12 +34,12 @@ public class JwtTokenHelper {
     }
 
     public String getUsernameFromToken(String token) {
-        return getAllClaimsFromToken(token).getSubject();
+        return getClaimsFromToken(token).getSubject();
     }
 
     public List<SimpleGrantedAuthority> getAuthoritiesFromToken(String token) {
         List<SimpleGrantedAuthority> authorities = null;
-        List<String> tokenAuthorities = (List) getAllClaimsFromToken(token).get("authorities");
+        List<String> tokenAuthorities = (List) getClaimsFromToken(token).get("authorities");
 
         if (tokenAuthorities != null) {
             authorities = tokenAuthorities.stream()
@@ -52,7 +50,7 @@ public class JwtTokenHelper {
         return authorities;
     }
 
-    private Claims getAllClaimsFromToken(String token) {
+    private Claims getClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 }
