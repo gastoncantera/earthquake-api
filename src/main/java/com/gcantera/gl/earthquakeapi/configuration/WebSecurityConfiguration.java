@@ -40,7 +40,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
 
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers(HttpMethod.POST, "/login").permitAll()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers("/v2/api-docs", "/swagger-ui/**", "/swagger-resources/**").permitAll() // springfox-swagger
 
                 // all other requests need to be authenticated
                 .anyRequest().authenticated()
