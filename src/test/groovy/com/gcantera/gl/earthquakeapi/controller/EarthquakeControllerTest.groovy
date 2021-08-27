@@ -67,7 +67,7 @@ class EarthquakeControllerTest extends Specification {
         )
 
         then:
-        results.andExpect(status().isForbidden())
+        results.andExpect(status().isUnauthorized())
     }
 
     @TestConfiguration

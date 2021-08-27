@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 @Configuration
 @EnableWebSecurity
@@ -37,20 +39,49 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
+        /**
+         * We are implementing a REST API and need stateless authentication
+         * with a JWT token; therefore, we need to set the following options:
+         *
+         * - Enable CORS and disable CSRF.
+         * - Set session management to stateless.
+         * - Set unauthorized requests exception handler.
+         * - Set permissions on endpoints.
+         * - Add JWT token filter.
+         */
 
-                // dont authenticate this particular request
-                .authorizeRequests()
+        // Enable CORS and disable CSRF. TODO: Enable CORS
+        httpSecurity.csrf().disable();
+
+        // Set session management to stateless.
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // Set unauthorized requests exception handler
+        httpSecurity.exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, ex) -> {
+                            response.sendError(
+                                    HttpServletResponse.SC_UNAUTHORIZED,
+                                    ex.getMessage()
+                            );
+                        }
+                );
+
+        // Set permissions on endpoints
+        httpSecurity.authorizeRequests()
+                // Our public endpoints
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers("/v2/api-docs", "/swagger-ui/**", "/swagger-resources/**").permitAll() // springfox-swagger
+                // Our private endpoints
+                .anyRequest().authenticated();
 
-                // all other requests need to be authenticated
-                .anyRequest().authenticated()
-
-                // make sure we use stateless session; session won't be used to store user's state.
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // Add a filter to validate the tokens with every request
+        // Add JWT token filter
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        /**
+         * Please note that we added the JwtTokenFilter before the Spring Security internal UsernamePasswordAuthenticationFilter.
+         * We’re doing this because we need access to the user identity at this point to perform authentication/authorization,
+         * and its extraction happens inside the JWT token filter based on the provided JWT token
+         */
     }
 }

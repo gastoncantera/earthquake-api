@@ -5,13 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Data
 @Component
@@ -23,10 +20,10 @@ public class JwtTokenHelper {
     @Value("${jwt.token.validity:600000}")
     private long validity;
 
-    public String buildToken(String username, Map<String, Object> claims) {
+    public String buildToken(String username, List<String> authorities) {
         return "Bearer " + Jwts.builder()
                 .setSubject(username)
-                .setClaims(claims)
+                .claim("authorities", authorities)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + validity))
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -37,17 +34,8 @@ public class JwtTokenHelper {
         return getClaimsFromToken(token).getSubject();
     }
 
-    public List<SimpleGrantedAuthority> getAuthoritiesFromToken(String token) {
-        List<SimpleGrantedAuthority> authorities = null;
-        List<String> tokenAuthorities = (List) getClaimsFromToken(token).get("authorities");
-
-        if (tokenAuthorities != null) {
-            authorities = tokenAuthorities.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
-        }
-
-        return authorities;
+    public List<String> getAuthoritiesFromToken(String token) {
+        return (List) getClaimsFromToken(token).get("authorities");
     }
 
     private Claims getClaimsFromToken(String token) {

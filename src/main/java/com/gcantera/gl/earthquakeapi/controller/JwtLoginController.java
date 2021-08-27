@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 @CrossOrigin
 @RestController
@@ -34,7 +34,7 @@ public class JwtLoginController {
         }
 
         // TODO: Inject UserDetailsService to loadUserByUsername the user details and get the authorities.
-        //       Then cook them inside the token using the HashMap if needed
-        return jwtTokenHelper.buildToken(username, new HashMap<>());
+        //       Then cook them inside the token using the List<String> if needed
+        return jwtTokenHelper.buildToken(username, new ArrayList<>());
     }
 }
